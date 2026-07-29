@@ -1,0 +1,24 @@
+# Sample Nginx reverse proxy for the backend, terminating SSL via
+# Let's Encrypt/Certbot. Copy to /etc/nginx/sites-available/, adjust
+# server_name and paths, symlink into sites-enabled, then run:
+#   sudo certbot --nginx -d api.yourdomain.com
+# (certbot rewrites the SSL block below automatically the first time it runs)
+
+server {
+    listen 80;
+    server_name api.yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Streaming/download responses can be large — don't buffer the
+        # whole thing in Nginx before forwarding.
+        proxy_buffering off;
+        proxy_read_timeout 60s;
+    }
+}

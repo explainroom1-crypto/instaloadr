@@ -1,0 +1,322 @@
+/* Secondary, below-the-fold styles — loaded non-blocking via the
+   preload+swap pattern in each page's <head>. See style.css for
+   the critical, above-the-fold styles that load synchronously. */
+
+/* ---------- Article-style long-form content ----------
+   The SEO-carrying prose block: readable measure, generous line-height,
+   restrained heading sizes so it reads like a short explainer, not a
+   wall of marketing copy. */
+.article-block{
+  padding: 48px 0 8px;
+  border-top: 1px solid var(--line);
+}
+.article{
+  max-width: 68ch;
+  margin: 0 auto;
+}
+.article h2{
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+}
+.article h3{
+  font-size: 17px;
+  margin: 28px 0 8px;
+}
+.article p{
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+.howto-list{
+  margin: 0 0 14px;
+  padding-left: 22px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  counter-reset: howto;
+}
+.howto-list li{
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+.howto-list li:last-child{ margin-bottom: 0; }
+.howto-list li strong{ color: var(--ink); }
+.howto-guide-intro{ margin-bottom: 14px; }
+
+/* ---------- Platform guides (iPhone / Android) ---------- */
+.platform-guides{
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+.platform-guides h2{
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 0 0 26px;
+  text-align: center;
+}
+.platform-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 700px){ .platform-grid{ grid-template-columns: 1fr; } }
+.platform{
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-sm);
+}
+.platform h3{
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+.platform ol{
+  margin: 0;
+  padding-left: 20px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.platform li{ margin-bottom: 8px; }
+.platform li:last-child{ margin-bottom: 0; }
+.platform li strong{ color: var(--ink); }
+.platform-note{
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin: 22px auto 0;
+}
+
+/* ---------- Notice band ----------
+   The trust/consent notice, moved out of the gradient hero onto plain
+   paper so it reads as sincere policy, not hero copy. */
+.notice-band{
+  padding: 22px 0 0;
+}
+.notice-band .notice{ margin-top: 0; }
+.about-blurb{
+  text-align: center;
+  max-width: 60ch;
+  margin: 0 auto 18px;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+.notice a{ color: var(--accent); font-weight: 600; }
+
+/* ---------- Feature grid ---------- */
+.features{
+  padding: 52px 0 12px;
+}
+.features h2{
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0 0 26px;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+.feature-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+@media (max-width: 860px){ .feature-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px){ .feature-grid{ grid-template-columns: 1fr; } }
+.feature{
+  text-align: center;
+  padding: 8px;
+}
+.feature-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-3));
+  color: #fff;
+  margin-bottom: 14px;
+}
+.feature-icon svg{ width: 24px; height: 24px; }
+.feature h3{
+  font-size: 15.5px;
+  margin: 0 0 6px;
+}
+.feature p{
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---------- How it works ---------- */
+.how{
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+}
+.how h2{
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0 0 26px;
+  letter-spacing: -0.01em;
+}
+.steps{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 760px){ .steps{ grid-template-columns: 1fr; } }
+.step{
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.step .num{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--success);
+  margin-bottom: 12px;
+  display:block;
+}
+.step-illustration{
+  width: 84px;
+  height: 84px;
+  margin: 0 0 16px;
+}
+.step-illustration svg{
+  width: 100%;
+  height: 100%;
+}
+.step h3{
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.step p{
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ---------- FAQ ---------- */
+.faq{
+  padding: 48px 0 68px;
+  border-top: 1px solid var(--line);
+}
+.faq h2{
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0 0 20px;
+  letter-spacing: -0.01em;
+}
+details{
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0;
+}
+summary{
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  list-style: none;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 16px;
+}
+summary::-webkit-details-marker{ display:none; }
+summary::after{ content:"+"; color: var(--accent); font-size: 20px; line-height: 1; flex-shrink:0; }
+details[open] summary::after{ content:"–"; }
+details p{
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  max-width: 62ch;
+}
+details a{ color: var(--accent); font-weight: 600; text-decoration: underline; }
+
+/* ---------- Footer ---------- */
+.site-footer{
+  border-top: 1px solid var(--line);
+  padding: 28px 0 40px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.site-footer .wrap{
+  display:flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.site-footer a{ color: var(--ink-soft); text-decoration: underline; }
+.site-footer a:hover{ color: var(--ink); }
+
+/* ---------- Ad placeholders ----------
+   Fixed-size reserved slots so a real ad network (AdX, Setupad, etc.)
+   can be dropped in later without shifting layout (CLS). Sizes match
+   common IAB standard units. Remove the label once a real ad script
+   is filling the slot. */
+.ad-slot{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin: 32px auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+}
+.ad-slot--leaderboard{ width: 100%; max-width: 728px; height: 90px; }
+.ad-slot--rectangle{ width: 300px; max-width: 100%; height: 250px; }
+
+@media (max-width: 480px){
+  .ad-slot--leaderboard{ height: 50px; } /* mobile banner fallback size */
+}
+
+/* ---------- Legal footer links ---------- */
+.legal-links{
+  display:flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Related Download Tools cross-link grid ---------- */
+.related-tools{
+  border-top: 1px solid var(--line);
+}
+.related-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 700px){ .related-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px){ .related-grid{ grid-template-columns: 1fr; } }
+.related-tool{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  text-decoration:none;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.related-tool:hover{
+  border-color: var(--grad-2);
+  box-shadow: var(--shadow-sm);
+}
+.related-tool svg{ width: 22px; height: 22px; flex-shrink:0; color: var(--ink-soft); }
+.related-tool span{ min-width: 0; }

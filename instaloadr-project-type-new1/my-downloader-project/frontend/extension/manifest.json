@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "InstaLoadr — Instagram Downloader",
+  "version": "0.1.0",
+  "description": "Download the Instagram post, reel, or story open in your current tab.",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "InstaLoadr"
+  },
+  "icons": {
+    "16": "icon-16.png",
+    "32": "icon-32.png",
+    "48": "icon-48.png"
+  },
+  "browser_specific_settings": {
+    "gecko": { "id": "instaloadr@example.com" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "InstaLoadr — Instagram Downloader",
+  "short_name": "InstaLoadr",
+  "description": "Free Instagram downloader for Reels, Stories, Videos, Photos, Audio, and Profile Pictures — no login, no watermark.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F5F0",
+  "theme_color": "#121317",
+  "icons": [
+    {
+      "src": "/instaloadr-favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/instaloadr-icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/instaloadr-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

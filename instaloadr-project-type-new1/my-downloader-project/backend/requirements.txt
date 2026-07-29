@@ -1,0 +1,12 @@
+# Pinned for production stability. yt-dlp is the one exception you should
+# bump regularly (Instagram changes its frontend often, and yt-dlp ships
+# security fixes) — check https://github.com/yt-dlp/yt-dlp/releases before
+# each deploy and run `pip install -U yt-dlp` when a newer version lands.
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+yt-dlp==2026.07.04
+httpx==0.27.2
+slowapi==0.1.9
+python-dotenv==1.0.1

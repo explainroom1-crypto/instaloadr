@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Instagram Audio Downloader – Extract Audio | InstaLoadr</title>
+<meta content="Extract and download audio from Instagram Reels and videos as MP3 with InstaLoadr. Fast, free, secure and no login required — works on any device instantly." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.gstatic.com" rel="preconnect" crossorigin/>
+<link as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" onload="this.onload=null;this.rel='stylesheet'" rel="preload"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/></noscript>
+<link href="css/style.min.css" rel="stylesheet"/>
+<link as="style" href="css/style-secondary.min.css" onload="this.onload=null;this.rel='stylesheet'" rel="preload"/>
+<noscript><link href="css/style-secondary.min.css" rel="stylesheet"/></noscript>
+<!-- SEO: canonical + social meta -->
+<link href="https://www.instaloadr.com/audio.html" rel="canonical"/>
+<meta content="index, follow" name="robots"/>
+<meta content="#121317" name="theme-color"/>
+<link href="instaloadr-favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="instaloadr-favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="instaloadr-favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="instaloadr-apple-touch-icon-180x180.png" rel="apple-touch-icon"/>
+<link href="site.webmanifest" rel="manifest"/>
+<meta content="website" property="og:type"/>
+<meta content="InstaLoadr" property="og:site_name"/>
+<meta content="InstaLoadr — Instagram Audio Downloader" property="og:title"/>
+<meta content="Paste a public Instagram Reel or video link to save just the audio track as an MP3. No login, no watermark." property="og:description"/>
+<meta content="https://www.instaloadr.com/audio.html" property="og:url"/>
+<meta content="https://www.instaloadr.com/instaloadr-instagram-downloader-social-preview.png" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="InstaLoadr — Instagram Audio Downloader" name="twitter:title"/>
+<meta content="Paste a public Instagram Reel or video link to save just the audio track as an MP3. No login, no watermark." name="twitter:description"/>
+<meta content="https://www.instaloadr.com/instaloadr-instagram-downloader-social-preview.png" name="twitter:image"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://www.instaloadr.com/#organization",
+  "name": "InstaLoadr",
+  "url": "https://www.instaloadr.com/",
+  "logo": "https://www.instaloadr.com/instaloadr-apple-touch-icon-180x180.png"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://www.instaloadr.com/#website",
+  "name": "InstaLoadr",
+  "url": "https://www.instaloadr.com/",
+  "publisher": { "@id": "https://www.instaloadr.com/#organization" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://www.instaloadr.com/audio.html#webpage",
+  "url": "https://www.instaloadr.com/audio.html",
+  "name": "InstaLoadr — Instagram Audio Downloader",
+  "description": "Paste a public Instagram Reel or video link to save just the audio track as an MP3. No login, no watermark.",
+  "isPartOf": { "@id": "https://www.instaloadr.com/#website" },
+  "about": { "@id": "https://www.instaloadr.com/#organization" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": ["WebApplication", "SoftwareApplication"],
+  "name": "InstaLoadr Instagram Audio Downloader",
+  "url": "https://www.instaloadr.com/audio.html",
+  "description": "Extract and save the audio track from a public Instagram Reel or video without logging in.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (web-based)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the Instagram Audio Downloader?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It's a tool for pulling just the sound out of a public Instagram Reel or video \u2014 paste a link, get an MP3, no app or login required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I get an MP3?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes \u2014 the video's audio track is extracted and returned as a standalone audio file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who owns the audio I download?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Whoever holds the rights to the original track or recording \u2014 extracting it doesn't change that. Use it accordingly, and check licensing before reusing music commercially."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Need the video too, not just the audio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the Reels downloader for the full video with sound."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to pay to download audio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. InstaLoadr is free, with no limit on how many public clips you extract audio from."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do downloaded audio files get saved?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wherever your browser normally saves files \u2014 check your device's \"Downloads\" folder, or your browser's download history if you're not sure where that is."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I extract audio from a Story?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool is built around Reels and feed videos. For a Story's audio specifically, save the Story with the Story downloader first, then extract the sound from that file separately."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Will the audio quality match the original?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The track is pulled from the same source Instagram streams for the video, at its original bitrate \u2014 nothing is re-recorded or recompressed."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use extracted audio commercially?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if you own the rights or have clear permission \u2014 extracting a track doesn't transfer ownership. Check licensing before using someone else's audio commercially."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does this work on private accounts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. InstaLoadr only extracts audio from Reels and videos that are already publicly viewable."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I extract audio on my phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It works the same in a mobile browser on iPhone or Android as it does on desktop \u2014 paste the link and download the audio file."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What if the Reel has multiple audio layers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The extracted file includes everything mixed into the final upload, such as background music plus a voiceover \u2014 there's no way to isolate one layer from an already-mixed video."
+      }
+    }
+  ]
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to use the Audio Downloader",
+  "description": "Pull just the audio from a Reel.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Copy the Reel link",
+      "text": "On the Reel or video, tap share \u2192 Copy Link, then paste it above."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "We split the audio",
+      "text": "The backend pulls the video and separates out its audio track."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Download",
+      "text": "Tap Save to download the MP3 to your device."
+    }
+  ]
+}</script><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://www.instaloadr.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Audio Downloader",
+      "item": "https://www.instaloadr.com/audio.html"
+    }
+  ]
+}</script></head>
+<body>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="index.html">
+<span class="aperture"></span>
+      InstaLoadr
+    </a>
+<details class="nav-dropdown">
+<summary>Instagram Downloader</summary>
+<div class="nav-dropdown-panel">
+<a href="video.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Video Downloader</span></a>
+<a href="index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="13" rx="2" width="15" x="2.5" y="3.5"></rect><circle cx="7" cy="8" r="1.4"></circle><path d="M3 14l4-4 3 3 4-5 4 6"></path></svg><span>Photo Downloader</span></a>
+<a href="reels.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Reels Downloader</span></a>
+<a href="story.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><circle cx="10" cy="10" r="7"></circle></svg><span>Story Downloader</span></a>
+<a href="dp.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><circle cx="10" cy="10" r="7.5"></circle><circle cx="10" cy="8" r="2.2"></circle><path d="M4.8 15.5c1-2.4 3-3 5.2-3s4.2.6 5.2 3"></path></svg><span>Profile Picture Downloader</span></a>
+<a class="active" href="audio.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><path d="M8 14V5l7-1.5V12"></path><circle cx="6" cy="14" r="2"></circle><circle cx="13" cy="12" r="2"></circle></svg><span>Audio Downloader</span></a>
+<a href="blog/index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="1.5" width="12" x="4" y="2.5"></rect><path d="M7 7h6M7 10.5h6M7 14h4"></path></svg><span>Blog</span></a></div>
+</details>
+</div>
+</header>
+<main id="main-content">
+<section class="hero">
+<div class="wrap hero-inner">
+<nav aria-label="Choose Instagram content type" class="type-tabs">
+<a class="type-tab" href="video.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Video</span></a>
+<a class="type-tab" href="index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="13" rx="2" width="15" x="2.5" y="3.5"></rect><circle cx="7" cy="8" r="1.4"></circle><path d="M3 14l4-4 3 3 4-5 4 6"></path></svg><span>Photo</span></a>
+<a class="type-tab" href="reels.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Reels</span></a>
+<a class="type-tab" href="story.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"></circle></svg><span>Story</span></a>
+<a class="type-tab" href="dp.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"></circle><circle cx="10" cy="8" r="2.2"></circle><path d="M4.8 15.5c1-2.4 3-3 5.2-3s4.2.6 5.2 3"></path></svg><span>Profile Pic</span></a>
+<a class="type-tab active" href="audio.html" aria-current="page"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><path d="M8 14V5l7-1.5V12"></path><circle cx="6" cy="14" r="2"></circle><circle cx="13" cy="12" r="2"></circle></svg><span>Audio</span></a>
+</nav>
+<h1>Pull just the <em>audio</em> from a Reel.</h1>
+<form class="loader-card" data-downloader="audio" id="audio-form">
+<div class="loader-slot">
+<input aria-label="Instagram reel or video link" placeholder="https://www.instagram.com/reel/…" required="" type="url"/>
+<button class="paste-btn" data-paste-btn="" type="button"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="3" rx="1" width="8" x="6" y="3.5"></rect><path d="M6 5H5a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 5 17h10a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 15 5h-1"></path></svg> Paste</button>
+</div><button class="btn btn-primary btn-block" type="submit">Download</button>
+<div class="loader-meta">
+<span><span class="dot-ready">●</span> Loader ready</span>
+<span>Audio · MP3</span>
+</div>
+</form><p class="hero-caption">MP3, no login</p>
+<div aria-live="polite" class="status-line" role="status"></div>
+<div class="contact-sheet">
+<div class="sprocket-rule"></div>
+<div class="frame-strip"></div>
+<button class="btn btn-primary" data-zip-all="" hidden="" style="margin-top:14px;background:var(--success);" type="button">
+          Download all as .zip
+        </button>
+</div>
+</div>
+</section><section class="notice-band"><div class="wrap"><p class="about-blurb">InstaLoadr pulls just the audio track from a public Instagram Reel or video — paste a link, get an MP3, no login required.</p><div class="notice">
+<strong>Music and audio are usually someone else's copyrighted work.</strong>
+        Extracting a track doesn't give you rights to it — this is meant
+        for saving your own audio, or clips you have permission to reuse.
+       Read our <a href="terms.html">Terms of Service</a>.</div></div></section><section class="article-block">
+<div class="wrap article">
+<h2>Instagram Audio Downloader</h2>
+<p>InstaLoadr's Instagram Audio Downloader takes a public Reel or video and separates out just the sound — no picture, no video file, just the audio track saved as its own file.</p>
+<p>It's a free Instagram downloader online, so it works the same way on a phone, tablet, or desktop — nothing to install, and no Instagram login needed for public content.</p>
+<h3>A quick note on rights</h3>
+<p>Extracting a track doesn't change who owns it — most audio on Instagram belongs to someone else (a musician, a label, the original creator). This tool is meant for your own audio, or clips you have clear permission to reuse; check licensing before reusing music commercially. If you want the full video with sound instead, use the <a href="reels.html">Reels downloader</a>.</p>
+<h3>Features of the audio downloader</h3>
+<p>Paste a link to a public Reel or video, and InstaLoadr separates the audio track from the picture, returning a standalone audio file with a single Download button. There's no need to keep the video around just to eventually re-extract the sound in a separate editor — this does that step for you, directly from the source.</p>
+<h3>Benefits over recording audio off your speaker</h3>
+<p>Recording sound by playing a video near a microphone picks up room noise, speaker distortion, and whatever else is happening around you at the time. Extracting the track directly from the source file avoids all of that — the audio comes through exactly as it was mixed and uploaded, with no ambient noise added on top.</p>
+<h3>HD download quality</h3>
+<p>The audio file is pulled from the same source Instagram streams for the video itself, so it keeps its original bitrate and clarity rather than being re-recorded through a second device. Voice clips, music clips, and mixed audio all extract at that same original quality.</p>
+<h3>Supported formats</h3>
+<p>Audio downloads as a standard audio file compatible with common media players and editors, without the accompanying video track. If you actually want the full clip with picture and sound together, the <a href="reels.html">Reels downloader</a> or <a href="video.html">Video downloader</a> keep both.</p>
+<h3>Device compatibility</h3>
+<p>Being browser-based, the audio downloader works the same on iPhone, Android, tablets, and desktop computers, with nothing to install. The resulting file saves through your device's normal download flow, ready to open in any audio app or import into an editor.</p>
+<h3>Browser compatibility</h3>
+<p>It's tested against current Chrome, Safari, Firefox, and Edge across mobile and desktop, using standard file-download behavior. An up-to-date browser is generally all that's needed for a smooth download.</p>
+<h3>Privacy</h3>
+<p>No Instagram login is needed — InstaLoadr only reads audio from Reels and videos that are already publicly viewable. Links you paste aren't stored beyond completing the extraction. The <a href="privacy.html">Privacy Policy</a> covers exactly what is and isn't kept.</p>
+<h3>Security</h3>
+<p>With no login step, there's no account password of yours involved anywhere in the process. Extraction runs over an encrypted connection and is limited to public content only, with no attempt to reach anything from a private account.</p>
+<h3>Why choose InstaLoadr for audio</h3>
+<p>Most "Instagram audio extractor" tools force you to download the full video first and convert it yourself elsewhere. InstaLoadr does the extraction directly, in one paste, with no forced video download, no sign-up, and no watermark or intro jingle added to the file.</p>
+<h3>Who uses an audio extractor</h3>
+<p>Podcasters and editors pulling a short clip of dialogue, musicians checking how their track sounds inside someone's Reel, and people who just want a voice memo or a song snippet without the accompanying video all reach for a tool like this instead of re-recording the sound off a speaker.</p>
+<h3>If the audio won't extract</h3>
+<p>The usual causes are the same as with video: a private account, a deleted post, or a shortened link pasted instead of the direct one copied from Instagram's Share menu. Re-copying the link fresh from the app and pasting it again resolves most failures; if it still won't extract, the post is very likely no longer public.</p>
+<h3>A note on using extracted audio</h3>
+<p>Pulling the audio track is a technical convenience, not a rights transfer — whoever owns the music or voice recording still owns it after extraction. This is fine for personal use, reference, or your own original audio; for anything shared publicly or used commercially, checking licensing first is worth the extra step.</p>
+<h3>What format the audio comes in</h3>
+<p>The extracted file plays in any standard audio app or media player without conversion — no special codec, no proprietary player. Once it's on your device it behaves like any other audio file: you can rename it, move it into a folder, import it into an editor, or share it the way you would a voice memo you recorded yourself.</p>
+<h3>Original audio vs. licensed music</h3>
+<p>Some Reels use original sound recorded by the creator, while others use a track from Instagram's music library. Both extract the same way technically, but the second case carries someone else's copyright on top — worth keeping in mind before reusing the extracted file anywhere public, even though the extraction itself works identically either way.</p>
+<h3>If the audio sounds off</h3>
+<p>Occasionally a clip mixes multiple audio layers — background music plus a voiceover, for instance — and the extracted file will include everything that was mixed into the final upload, not just one layer. There's no way to isolate a single track out of an already-mixed video, since InstaLoadr pulls the audio as Instagram stored it rather than reconstructing the original separate layers.</p>
+<h3>Conclusion</h3>
+<p>To pull just the sound from a public Instagram Reel or video without extra conversion steps, paste the link above and download the audio directly. For the full clip with video included, the <a href="reels.html">Reels downloader</a> and <a href="video.html">Video downloader</a> are right there too.</p>
+</div>
+</section><section class="features">
+<div class="wrap">
+<h2>Why people use InstaLoadr</h2>
+<div class="feature-grid">
+<div class="feature">
+<span class="feature-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<h3>Fast downloads</h3>
+<p>Files start saving in seconds — no queues, no waiting on ads to finish.</p>
+</div>
+<div class="feature">
+<span class="feature-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><rect height="10" rx="2" width="13" x="3" y="4"></rect><path d="M8 18h5M9 14v4" stroke-linecap="round"></path><rect height="8" rx="1" width="4" x="17" y="8"></rect></svg></span>
+<h3>Works on every device</h3>
+<p>Phone, tablet, or desktop — it runs in the browser, no app install needed.</p>
+</div>
+<div class="feature">
+<span class="feature-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 3l2.4 5 5.6.6-4.2 3.8 1.2 5.6L12 15l-5 3 1.2-5.6L4 8.6l5.6-.6L12 3z" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<h3>Original quality</h3>
+<p>Every photo and video saves at the resolution it was posted in — no recompression.</p>
+</div>
+<div class="feature">
+<span class="feature-icon"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke-linejoin="round"></path></svg></span>
+<h3>Privacy first</h3>
+<p>No login, no tracking your account, no saving of the links you paste.</p>
+</div>
+</div>
+</div>
+</section>
+<div class="wrap"><div aria-hidden="true" class="ad-slot ad-slot--leaderboard"><span>Ad space — 728×90</span></div></div>
+<section class="how">
+<div class="wrap">
+<h2>How it works</h2>
+<div class="steps">
+<div class="step">
+<div class="step-illustration"><svg fill="none" viewbox="0 0 96 96">
+<rect height="80" rx="10" stroke="var(--ink)" stroke-width="2.5" width="56" x="10" y="8"></rect>
+<rect fill="var(--paper-dim)" height="26" rx="4" stroke="var(--ink-soft)" stroke-width="1.5" width="36" x="20" y="20"></rect>
+<line stroke="var(--ink-soft)" stroke-linecap="round" stroke-width="2.5" x1="20" x2="48" y1="54" y2="54"></line>
+<line stroke="var(--ink-soft)" stroke-linecap="round" stroke-width="2.5" x1="20" x2="40" y1="62" y2="62"></line>
+<circle cx="72" cy="30" fill="url(#stepGrad1)" r="18"></circle>
+<path d="M64 30h16M74 22l6 8-6 8" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<defs><lineargradient id="stepGrad1" x1="54" x2="90" y1="12" y2="48"><stop stop-color="var(--grad-1)"></stop><stop offset="1" stop-color="var(--grad-3)"></stop></lineargradient></defs>
+</svg></div><span class="num">01 / paste</span>
+<h3>Copy the Reel link</h3>
+<p>On the Reel or video, tap share → Copy Link, then paste it above.</p>
+</div>
+<div class="step">
+<div class="step-illustration"><svg fill="none" viewbox="0 0 96 96">
+<rect height="62" rx="8" stroke="var(--ink)" stroke-width="2.5" width="80" x="8" y="14"></rect>
+<line stroke="var(--ink)" stroke-width="2.5" x1="8" x2="88" y1="28" y2="28"></line>
+<circle cx="17" cy="21" fill="var(--ink-soft)" r="2.4"></circle><circle cx="26" cy="21" fill="var(--ink-soft)" r="2.4"></circle>
+<rect fill="var(--paper-dim)" height="14" rx="2" stroke="var(--ink-soft)" stroke-width="1.3" width="6" x="30" y="48"></rect>
+<rect fill="var(--paper-dim)" height="22" rx="2" stroke="var(--ink-soft)" stroke-width="1.3" width="6" x="40" y="40"></rect>
+<rect fill="var(--paper-dim)" height="16" rx="2" stroke="var(--ink-soft)" stroke-width="1.3" width="6" x="50" y="46"></rect>
+<rect fill="var(--paper-dim)" height="26" rx="2" stroke="var(--ink-soft)" stroke-width="1.3" width="6" x="60" y="36"></rect>
+<circle cx="72" cy="66" fill="url(#stepGrad2)" r="18"></circle>
+<circle cx="72" cy="66" r="10" stroke="#fff" stroke-dasharray="14 8" stroke-linecap="round" stroke-width="2.5"></circle>
+<defs><lineargradient id="stepGrad2" x1="54" x2="90" y1="48" y2="84"><stop stop-color="var(--grad-2)"></stop><stop offset="1" stop-color="var(--grad-3)"></stop></lineargradient></defs>
+</svg></div><span class="num">02 / fetch</span>
+<h3>We split the audio</h3>
+<p>The backend pulls the video and separates out its audio track.</p>
+</div>
+<div class="step">
+<div class="step-illustration"><svg fill="none" viewbox="0 0 96 96">
+<path d="M24 36V16h48v20" stroke="var(--ink)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<path d="M16 44h64v34a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V44z" stroke="var(--ink)" stroke-linejoin="round" stroke-width="2.5"></path>
+<circle cx="48" cy="46" fill="url(#stepGrad3)" r="22"></circle>
+<path d="M48 36v20M39 48l9 9 9-9" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<defs><lineargradient id="stepGrad3" x1="26" x2="70" y1="24" y2="68"><stop stop-color="var(--grad-1)"></stop><stop offset="1" stop-color="var(--grad-2)"></stop></lineargradient></defs>
+</svg></div><span class="num">03 / save</span>
+<h3>Download</h3>
+<p>Tap Save to download the MP3 to your device.</p>
+</div>
+</div>
+</div>
+</section><section class="platform-guides">
+<div class="wrap">
+<h2>Download the audio track on any device</h2>
+<div class="platform-grid">
+<div class="platform">
+<h3>On iPhone or iPad</h3>
+<ol>
+<li>Open the post, tap the <strong>⋯</strong> or Share icon, then <strong>Copy Link</strong>.</li>
+<li>Open Safari (or your usual browser) and come back to this page.</li>
+<li>Paste the link into the box above and tap Download.</li>
+<li>Tap Save, then use the share sheet to save it to your device.</li>
+</ol>
+</div>
+<div class="platform">
+<h3>On Android</h3>
+<ol>
+<li>Open the post and tap <strong>Copy Link</strong> from the share menu.</li>
+<li>Switch to Chrome (or your usual browser) and open this page.</li>
+<li>Paste the link into the box above and tap Download.</li>
+<li>Tap Save — the file lands in your Downloads folder or Gallery.</li>
+</ol>
+</div>
+</div>
+<p class="platform-note">InstaLoadr is a website, not an app — nothing to install on either platform, and it works the same way on a desktop browser too.</p>
+</div>
+</section>
+<div class="wrap"><div aria-hidden="true" class="ad-slot ad-slot--rectangle"><span>Ad space — 300×250</span></div></div>
+<section class="faq">
+<div class="wrap">
+<h2>Questions</h2>
+<details open=""><summary>What is the Instagram Audio Downloader?</summary><p>It's a tool for pulling just the sound out of a public Instagram Reel or video — paste a link, get an MP3, no app or login required.</p></details><details>
+<summary>Do I get an MP3?</summary>
+<p>Yes — the video's audio track is extracted and returned as a standalone audio file.</p>
+</details>
+<details>
+<summary>Who owns the audio I download?</summary>
+<p>Whoever holds the rights to the original track or recording — extracting it doesn't change that. Use it accordingly, and check licensing before reusing music commercially.</p>
+</details>
+<details>
+<summary>Need the video too, not just the audio?</summary>
+<p>Use the <a href="reels.html">Reels downloader</a> for the full video with sound.</p>
+</details>
+<details><summary>Do I have to pay to download audio?</summary><p>No. InstaLoadr is free, with no limit on how many public clips you extract audio from.</p></details><details><summary>Where do downloaded audio files get saved?</summary><p>Wherever your browser normally saves files — check your device's "Downloads" folder, or your browser's download history if you're not sure where that is.</p></details>
+<details>
+<summary>Can I extract audio from a Story?</summary>
+<p>This tool is built around Reels and feed videos. For a Story's audio specifically, save the Story with the <a href="story.html">Story downloader</a> first, then extract the sound from that file separately.</p>
+</details>
+<details>
+<summary>Will the audio quality match the original?</summary>
+<p>Yes. The track is pulled from the same source Instagram streams for the video, at its original bitrate — nothing is re-recorded or recompressed.</p>
+</details>
+<details>
+<summary>Can I use extracted audio commercially?</summary>
+<p>Only if you own the rights or have clear permission — extracting a track doesn't transfer ownership. Check licensing before using someone else's audio commercially.</p>
+</details>
+<details>
+<summary>Does this work on private accounts?</summary>
+<p>No. InstaLoadr only extracts audio from Reels and videos that are already publicly viewable.</p>
+</details>
+<details>
+<summary>Can I extract audio on my phone?</summary>
+<p>Yes. It works the same in a mobile browser on iPhone or Android as it does on desktop — paste the link and download the audio file.</p>
+</details>
+<details>
+<summary>What if the Reel has multiple audio layers?</summary>
+<p>The extracted file includes everything mixed into the final upload, such as background music plus a voiceover — there's no way to isolate one layer from an already-mixed video.</p>
+</details>
+</div>
+</section>
+<section class="related-tools">
+<div class="wrap" style="padding-top: 40px; padding-bottom: 40px;">
+<h2>Related Download Tools</h2>
+<div class="related-grid">
+<a class="related-tool" href="video.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Video Downloader</span></a>
+<a class="related-tool" href="index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="13" rx="2" width="15" x="2.5" y="3.5"></rect><circle cx="7" cy="8" r="1.4"></circle><path d="M3 14l4-4 3 3 4-5 4 6"></path></svg><span>Photo Downloader</span></a>
+<a class="related-tool" href="reels.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Reels Downloader</span></a>
+<a class="related-tool" href="story.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"></circle></svg><span>Story Downloader</span></a>
+<a class="related-tool" href="dp.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5"></circle><circle cx="10" cy="8" r="2.2"></circle><path d="M4.8 15.5c1-2.4 3-3 5.2-3s4.2.6 5.2 3"></path></svg><span>Profile Picture Downloader</span></a>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<span>InstaLoadr — not affiliated with Instagram or Meta.</span>
+<span><a href="index.html">Home</a> · <a href="reels.html">Instagram Reel Downloader</a> · <a href="story.html">Instagram Story Downloader</a> · <a href="video.html">Instagram Video Downloader</a> · <a href="index.html">Instagram Photo Downloader</a> · <a href="audio.html">Instagram Audio Downloader</a> · <a href="dp.html">Profile Picture Downloader</a></span>
+<span><a href="about.html">About</a> · <a href="contact.html">Contact</a> · <a href="faq.html">FAQ</a></span>
+<span class="legal-links"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a> · <a href="disclaimer.html#dmca">DMCA</a> · <a href="disclaimer.html">Disclaimer</a></span>
+</div>
+</footer>
+<script src="js/app.js" defer></script>
+</body>
+</html>
