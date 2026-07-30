@@ -249,10 +249,7 @@ if formats:
 
         if not best:
             continue
-
-        if not best:
-            continue
-
+          
         items.append(
             {
                 "media_type": entry.get("ext", "media"),
