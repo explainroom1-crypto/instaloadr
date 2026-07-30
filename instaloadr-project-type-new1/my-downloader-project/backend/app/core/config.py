@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     # an Instagram account YOU control. Only needed for content that
     # requires a logged-in session (e.g. your own Stories). Leave unset
     # for public post/reel extraction.
-    cookies_file: Optional[str] = "cookies.txt"
+    cookies_file: Optional[str] = None
 
     # --- Mock mode --------------------------------------------------------
     # When true, /api/fetch skips real extraction entirely and returns a
