@@ -187,16 +187,13 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
     settings = get_settings()
 
     ydl_opts = {
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-        "socket_timeout": timeout,
-        # If you're extracting content that requires being logged in
-        # (e.g. your own Stories), point this at a cookies.txt file
-        # exported from an account you control. Never use scraped or
-        # shared credentials here.
-        "cookiefile": getattr(settings, "cookies_file", None) or None,
-    }
+    "quiet": True,
+    "no_warnings": True,
+    "skip_download": True,
+    "socket_timeout": timeout,
+    "ignore_no_formats_error": True,
+    "cookiefile": getattr(settings, "cookies_file", None) or None,
+}
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
