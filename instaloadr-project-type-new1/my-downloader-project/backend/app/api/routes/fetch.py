@@ -187,13 +187,17 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
     settings = get_settings()
 
     ydl_opts = {
-    "quiet": True,
-    "no_warnings": True,
-    "skip_download": True,
-    "socket_timeout": timeout,
-    "ignore_no_formats_error": True,
-    "cookiefile": getattr(settings, "cookies_file", None) or None,
-}
+        "quiet": True,
+        "no_warnings": True,
+        "skip_download": True,
+        "socket_timeout": timeout,
+        "ignore_no_formats_error": True,
+        # If you're extracting content that requires being logged in
+        # (e.g. your own Stories), point this at a cookies.txt file
+        # exported from an account you control. Never use scraped or
+        # shared credentials here.
+        "cookiefile": getattr(settings, "cookies_file", None) or None,
+    }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
@@ -234,7 +238,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
             # audio file. Document this clearly rather than pretending
             # otherwise (see backend/README.md "Audio extraction" note).
 
-if formats:
+        if formats:
             # Prefer the highest-resolution progressive format yt-dlp found.
             best_format = max(formats, key=lambda f: (f.get("height") or 0))
             best = best_format.get("url", best)
@@ -249,7 +253,7 @@ if formats:
 
         if not best:
             continue
-          
+
         items.append(
             {
                 "media_type": entry.get("ext", "media"),
