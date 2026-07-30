@@ -234,12 +234,18 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
             # audio file. Document this clearly rather than pretending
             # otherwise (see backend/README.md "Audio extraction" note).
 
-        if formats:
+if formats:
             # Prefer the highest-resolution progressive format yt-dlp found.
             best_format = max(formats, key=lambda f: (f.get("height") or 0))
             best = best_format.get("url", best)
             width = best_format.get("width", width)
             height = best_format.get("height", height)
+        elif entry.get("thumbnail"):
+            # No video formats — this is a photo-only post/entry.
+            # Fall back to the image URL yt-dlp already found instead
+            # of dropping it.
+            best = entry.get("thumbnail")
+            entry["ext"] = "jpg"
 
         if not best:
             continue
