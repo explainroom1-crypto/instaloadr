@@ -538,7 +538,7 @@ img{ max-width:100%; display:block; }
   border-radius: 999px;
   transition: background-color .15s var(--ease);
 }
-.frame .dl-btn:hover{ background: var(--accent); }
+.frame .dl-btn:hover{ background: #000; }
 
 /* ---------- Notice ---------- */
 .notice{
