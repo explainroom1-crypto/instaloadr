@@ -105,7 +105,7 @@ function renderFrames(strip, items) {
       </div>
       <div class="frame-foot">
         <span>${(item.media_type || "media").toUpperCase()}${item.width ? ` · ${item.width}×${item.height}` : ""}</span>
-        <button type="button" class="dl-btn" data-download-url="${item.download_url}" data-media-type="${item.media_type || ""}">Save</button>
+        <button type="button" class="dl-btn" data-download-url="${item.download_url}" data-media-type="${item.media_type || ""}"${item.audio_url ? ` data-audio-url="${item.audio_url}"` : ""}>Save</button>
       </div>
     `;
     strip.appendChild(frame);
@@ -129,12 +129,23 @@ function renderFrames(strip, items) {
  */
 async function downloadSingleItem(button) {
   const cdnUrl = button.dataset.downloadUrl;
+  const audioUrl = button.dataset.audioUrl;
   const isVideo = button.dataset.mediaType === "mp4";
   const originalLabel = button.textContent;
   button.disabled = true;
 
+  // Most items are a single file — /api/stream just proxies it as-is.
+  // But when the backend found video and audio as two SEPARATE
+  // Instagram CDN streams (no file has both), it sends back an
+  // audio_url alongside download_url. In that case we hit
+  // /api/stream-merged instead, which uses ffmpeg on the backend to
+  // combine the two into one playable file before streaming it here.
+  const streamUrl = audioUrl
+    ? `${API_BASE_URL}/api/stream-merged?video_url=${encodeURIComponent(cdnUrl)}&audio_url=${encodeURIComponent(audioUrl)}`
+    : `${API_BASE_URL}/api/stream?url=${encodeURIComponent(cdnUrl)}`;
+
   try {
-    const res = await fetch(`${API_BASE_URL}/api/stream?url=${encodeURIComponent(cdnUrl)}`);
+    const res = await fetch(streamUrl);
 
     if (!res.ok) {
       // Proxy declined (e.g. mock-mode placeholder host isn't on the
