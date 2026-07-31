@@ -238,19 +238,19 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
             # audio file. Document this clearly rather than pretending
             # otherwise (see backend/README.md "Audio extraction" note).
 
-if formats:
-    # Prefer formats that actually have both audio and video (muxed/progressive).
-    muxed = [
-        f for f in formats
-        if f.get("vcodec") not in (None, "none") and f.get("acodec") not in (None, "none")
-    ]
-    if muxed:
-        best_format = max(muxed, key=lambda f: (f.get("height") or 0))
-        best = best_format.get("url", best)
-        width = best_format.get("width", width)
-        height = best_format.get("height", height)
-    # else: no muxed format exists — keep yt-dlp's default `best` (entry.get("url"))
-    # rather than falling back to a video-only stream, since that's silent.
+        if formats:
+            # Prefer formats that actually have both audio and video (muxed/progressive).
+            muxed = [
+                f for f in formats
+                if f.get("vcodec") not in (None, "none") and f.get("acodec") not in (None, "none")
+            ]
+            if muxed:
+                best_format = max(muxed, key=lambda f: (f.get("height") or 0))
+                best = best_format.get("url", best)
+                width = best_format.get("width", width)
+                height = best_format.get("height", height)
+            # else: no muxed format exists — keep yt-dlp's default `best` (entry.get("url"))
+            # rather than falling back to a video-only stream, since that's silent.
         elif entry.get("thumbnail"):
             # No video formats — this is a photo-only post/entry.
             # Fall back to the image URL yt-dlp already found instead
