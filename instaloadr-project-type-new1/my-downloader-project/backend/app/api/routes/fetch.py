@@ -25,10 +25,12 @@ Limits you should know about, honestly:
 """
 import asyncio
 import hashlib
+import re
 from concurrent.futures import ThreadPoolExecutor
 from typing import Literal, Optional
 from urllib.parse import urlparse
 
+import httpx
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, field_validator
 
@@ -72,6 +74,12 @@ class MediaItem(BaseModel):
     width: Optional[int] = None
     height: Optional[int] = None
     duration: Optional[float] = None
+    # Set only when Instagram served video and audio as two separate
+    # streams (no single format has both). When present, the frontend
+    # should call /api/stream-merged with BOTH urls instead of
+    # /api/stream with just download_url, so the two get combined
+    # server-side before reaching the browser.
+    audio_url: Optional[str] = None
 
 
 class FetchResponse(BaseModel):
@@ -211,6 +219,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         best = entry.get("url")
         width = entry.get("width")
         height = entry.get("height")
+        audio_url = None
 
         if media_type == "audio":
             # Instagram typically muxes audio into the video container
@@ -230,6 +239,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
                         "width": None,
                         "height": None,
                         "duration": entry.get("duration"),
+                        "audio_url": None,
                     }
                 )
                 continue
@@ -239,7 +249,9 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
             # otherwise (see backend/README.md "Audio extraction" note).
 
         if formats:
-            # Prefer formats that actually have both audio and video (muxed/progressive).
+            # Prefer formats that actually have both audio and video
+            # muxed into one file — that's the simple, always-playable
+            # case.
             muxed = [
                 f for f in formats
                 if f.get("vcodec") not in (None, "none") and f.get("acodec") not in (None, "none")
@@ -249,10 +261,26 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
                 best = best_format.get("url", best)
                 width = best_format.get("width", width)
                 height = best_format.get("height", height)
-            # else: no muxed format exists — keep yt-dlp's default `best` (entry.get("url"))
-            # rather than falling back to a video-only stream, since that's silent.
+            else:
+                # No single format has both — Instagram served video
+                # and audio as two separate streams. Grab the best of
+                # each; /api/stream-merged will combine them with
+                # ffmpeg before the file reaches the browser.
+                video_only = [f for f in formats if f.get("vcodec") not in (None, "none")]
+                audio_only = [
+                    f for f in formats
+                    if f.get("acodec") not in (None, "none") and f.get("vcodec") in (None, "none")
+                ]
+                if video_only:
+                    best_video = max(video_only, key=lambda f: (f.get("height") or 0))
+                    best = best_video.get("url", best)
+                    width = best_video.get("width", width)
+                    height = best_video.get("height", height)
+                if audio_only:
+                    best_audio = max(audio_only, key=lambda f: (f.get("abr") or 0))
+                    audio_url = best_audio.get("url")
         elif entry.get("thumbnail"):
-            # No video formats — this is a photo-only post/entry.
+            # No video formats at all — this is a photo-only post/entry.
             # Fall back to the image URL yt-dlp already found instead
             # of dropping it.
             best = entry.get("thumbnail")
@@ -269,9 +297,57 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
                 "width": width,
                 "height": height,
                 "duration": entry.get("duration"),
+                "audio_url": audio_url,
             }
         )
     return items
+
+
+async def _extract_profile_pic(url: str, timeout: int) -> list[dict]:
+    """
+    Profile pictures aren't "posts" — there's no video/photo entry for
+    yt-dlp to extract, so this bypasses yt-dlp entirely. Instead, fetch
+    the public profile page and pull the avatar out of the page's
+    og:image meta tag, which Instagram exposes for public profiles
+    without requiring a logged-in session.
+    """
+    parsed = urlparse(url)
+    path_parts = [p for p in parsed.path.split("/") if p]
+    if not path_parts:
+        raise ValueError("Couldn't find a username in that profile link.")
+    username = path_parts[0]
+
+    profile_url = f"https://www.instagram.com/{username}/"
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+        ),
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+
+    async with httpx.AsyncClient(timeout=timeout, headers=headers, follow_redirects=True) as client:
+        resp = await client.get(profile_url)
+        resp.raise_for_status()
+        html = resp.text
+
+    match = re.search(r'<meta property="og:image" content="([^"]+)"', html)
+    if not match:
+        raise ValueError("Couldn't find a profile picture for that account.")
+
+    image_url = match.group(1).replace("&amp;", "&")
+
+    return [
+        {
+            "media_type": "jpg",
+            "download_url": image_url,
+            "thumbnail_url": image_url,
+            "width": None,
+            "height": None,
+            "duration": None,
+            "audio_url": None,
+        }
+    ]
 
 
 @router.post("/fetch", response_model=FetchResponse)
@@ -284,14 +360,26 @@ async def fetch_media(payload: FetchRequest, request: Request):
         return FetchResponse(source_url=payload.url, items=[MediaItem(**item) for item in raw_items])
 
     if payload.media_type == "dp":
-        # Profile-picture extraction needs a different code path than
-        # yt-dlp's post/reel extractor (it's not a "post" URL at all —
-        # it's the account's own avatar). Not built yet. Saying so
-        # clearly here beats returning a confusing generic failure.
-        raise HTTPException(
-            status_code=501,
-            detail="Profile picture downloads aren't implemented yet — coming soon.",
-        )
+        cache_key = _cache_key(payload.url, payload.media_type)
+        cached = _fetch_cache.get(cache_key) if settings.fetch_cache_ttl_seconds > 0 else None
+        if cached is not None:
+            return FetchResponse(source_url=payload.url, items=[MediaItem(**item) for item in cached])
+
+        try:
+            raw_items = await _extract_profile_pic(payload.url, settings.request_timeout_seconds)
+        except Exception as exc:
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    "Couldn't find a profile picture for that link. Make sure "
+                    "it's a public profile URL, e.g. https://www.instagram.com/username/."
+                ),
+            ) from exc
+
+        if settings.fetch_cache_ttl_seconds > 0:
+            _fetch_cache.set(cache_key, raw_items)
+
+        return FetchResponse(source_url=payload.url, items=[MediaItem(**item) for item in raw_items])
 
     cache_key = _cache_key(payload.url, payload.media_type)
     cached = _fetch_cache.get(cache_key) if settings.fetch_cache_ttl_seconds > 0 else None
