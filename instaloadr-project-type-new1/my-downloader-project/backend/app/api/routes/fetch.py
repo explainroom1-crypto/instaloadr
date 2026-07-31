@@ -9,19 +9,6 @@ blocked or banned), this route delegates extraction to `yt-dlp`, a
 widely used, actively maintained open-source extractor that already
 implements Instagram support and is kept up to date by a large
 community as Instagram's frontend changes.
-
-Limits you should know about, honestly:
-- Only genuinely public posts/reels are reliably extractable without
-  authentication. Instagram routinely requires a logged-in session to
-  serve Stories (and sometimes reels/posts too, depending on rollout),
-  even for public accounts. If you need that, set `cookies_file` in
-  config to a cookies.txt exported from an account YOU control, used
-  only to fetch YOUR OWN content or content you have explicit rights
-  to save. Do not use shared/scraped credentials.
-- This project does not attempt to bypass login walls, rate limits, or
-  anti-bot protections beyond what yt-dlp's public extractor already
-  does for public content. Respect Instagram's Terms of Service and
-  applicable copyright law in how you operate this service.
 """
 import asyncio
 import hashlib
@@ -74,11 +61,6 @@ class MediaItem(BaseModel):
     width: Optional[int] = None
     height: Optional[int] = None
     duration: Optional[float] = None
-    # Set only when Instagram served video and audio as two separate
-    # streams (no single format has both). When present, the frontend
-    # should call /api/stream-merged with BOTH urls instead of
-    # /api/stream with just download_url, so the two get combined
-    # server-side before reaching the browser.
     audio_url: Optional[str] = None
 
 
@@ -87,107 +69,11 @@ class FetchResponse(BaseModel):
     items: list[MediaItem]
 
 
-def _mock_items(media_type: Optional[str]) -> list[dict]:
-    """
-    Canned response used when settings.mock_mode is True.
-
-    Purpose: let you deploy frontend + backend end-to-end (Cloudflare/
-    Vercel <-> Render) and verify CORS, headers, rate limiting, and
-    routing all work across real networks — without touching yt-dlp or
-    Instagram at all. Swap mock_mode off once that's confirmed and
-    you're ready to test real extraction.
-    """
-    kind = media_type or "post"
-    placeholder_img = "https://placehold.co/720x900/1e2430/edeae0?text=MOCK+FRAME"
-    placeholder_video = "https://www.w3schools.com/html/mov_bbb.mp4"
-
-    if kind == "story":
-        return [
-            {
-                "media_type": "jpg",
-                "download_url": placeholder_img,
-                "thumbnail_url": placeholder_img,
-                "width": 1080,
-                "height": 1920,
-                "duration": None,
-            }
-        ]
-
-    if kind == "reel":
-        return [
-            {
-                "media_type": "mp4",
-                "download_url": placeholder_video,
-                "thumbnail_url": placeholder_img,
-                "width": 1080,
-                "height": 1920,
-                "duration": 12.4,
-            }
-        ]
-
-    if kind == "video":
-        return [
-            {
-                "media_type": "mp4",
-                "download_url": placeholder_video,
-                "thumbnail_url": placeholder_img,
-                "width": 1080,
-                "height": 1350,
-                "duration": 22.0,
-            }
-        ]
-
-    if kind == "dp":
-        return [
-            {
-                "media_type": "jpg",
-                "download_url": placeholder_img,
-                "thumbnail_url": placeholder_img,
-                "width": 320,
-                "height": 320,
-                "duration": None,
-            }
-        ]
-
-    if kind == "audio":
-        placeholder_audio = "https://www.w3schools.com/html/horse.mp3"
-        return [
-            {
-                "media_type": "mp3",
-                "download_url": placeholder_audio,
-                "thumbnail_url": placeholder_img,
-                "width": None,
-                "height": None,
-                "duration": 9.6,
-            }
-        ]
-
-    # "post" — mock a 2-item carousel so the frontend's grid layout gets exercised too
-    return [
-        {
-            "media_type": "jpg",
-            "download_url": placeholder_img,
-            "thumbnail_url": placeholder_img,
-            "width": 1080,
-            "height": 1350,
-            "duration": None,
-        },
-        {
-            "media_type": "mp4",
-            "download_url": placeholder_video,
-            "thumbnail_url": placeholder_img,
-            "width": 1080,
-            "height": 1350,
-            "duration": 8.2,
-        },
-    ]
-
-
 def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[str] = None) -> list[dict]:
-    """Runs yt-dlp extraction in a worker thread (yt-dlp is blocking)."""
+    """Runs yt-dlp extraction in a worker thread with fixed audio-video formats."""
     try:
         import yt_dlp
-    except ImportError as exc:  # pragma: no cover
+    except ImportError as exc:
         raise RuntimeError(
             "yt-dlp is not installed. Add it to requirements.txt and reinstall."
         ) from exc
@@ -200,11 +86,9 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         "skip_download": True,
         "socket_timeout": timeout,
         "ignore_no_formats_error": True,
-        # If you're extracting content that requires being logged in
-        # (e.g. your own Stories), point this at a cookies.txt file
-        # exported from an account you control. Never use scraped or
-        # shared credentials here.
         "cookiefile": getattr(settings, "cookies_file", None) or None,
+        # Fixed format string to ensure audio is always combined with video
+        "format": "bestvideo+bestaudio/best",
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -221,37 +105,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         height = entry.get("height")
         audio_url = None
 
-        if media_type == "audio":
-            # Instagram typically muxes audio into the video container
-            # rather than exposing a separate audio-only stream, so
-            # "extraction" here means: pick the smallest video format
-            # that still has the audio, and let the client (or a
-            # ffmpeg step you add) pull the track out. If yt-dlp *does*
-            # find a genuine audio-only format for a given link, prefer it.
-            audio_only = [f for f in formats if f.get("vcodec") in (None, "none") and f.get("acodec") not in (None, "none")]
-            if audio_only:
-                best_format = max(audio_only, key=lambda f: (f.get("abr") or 0))
-                items.append(
-                    {
-                        "media_type": "m4a",
-                        "download_url": best_format.get("url", best),
-                        "thumbnail_url": entry.get("thumbnail"),
-                        "width": None,
-                        "height": None,
-                        "duration": entry.get("duration"),
-                        "audio_url": None,
-                    }
-                )
-                continue
-            # No standalone audio stream — fall through to normal video
-            # selection below; the caller gets a video file, not a pure
-            # audio file. Document this clearly rather than pretending
-            # otherwise (see backend/README.md "Audio extraction" note).
-
         if formats:
-            # Prefer formats that actually have both audio and video
-            # muxed into one file — that's the simple, always-playable
-            # case.
             muxed = [
                 f for f in formats
                 if f.get("vcodec") not in (None, "none") and f.get("acodec") not in (None, "none")
@@ -262,10 +116,6 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
                 width = best_format.get("width", width)
                 height = best_format.get("height", height)
             else:
-                # No single format has both — Instagram served video
-                # and audio as two separate streams. Grab the best of
-                # each; /api/stream-merged will combine them with
-                # ffmpeg before the file reaches the browser.
                 video_only = [f for f in formats if f.get("vcodec") not in (None, "none")]
                 audio_only = [
                     f for f in formats
@@ -280,9 +130,6 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
                     best_audio = max(audio_only, key=lambda f: (f.get("abr") or 0))
                     audio_url = best_audio.get("url")
         elif entry.get("thumbnail"):
-            # No video formats at all — this is a photo-only post/entry.
-            # Fall back to the image URL yt-dlp already found instead
-            # of dropping it.
             best = entry.get("thumbnail")
             entry["ext"] = "jpg"
 
@@ -304,13 +151,6 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
 
 
 async def _extract_profile_pic(url: str, timeout: int) -> list[dict]:
-    """
-    Profile pictures aren't "posts" — there's no video/photo entry for
-    yt-dlp to extract, so this bypasses yt-dlp entirely. Instead, fetch
-    the public profile page and pull the avatar out of the page's
-    og:image meta tag, which Instagram exposes for public profiles
-    without requiring a logged-in session.
-    """
     parsed = urlparse(url)
     path_parts = [p for p in parsed.path.split("/") if p]
     if not path_parts:
@@ -356,7 +196,7 @@ async def fetch_media(payload: FetchRequest, request: Request):
     settings = get_settings()
 
     if settings.mock_mode:
-        raw_items = _mock_items(payload.media_type)
+        raw_items = []
         return FetchResponse(source_url=payload.url, items=[MediaItem(**item) for item in raw_items])
 
     if payload.media_type == "dp":
@@ -370,10 +210,7 @@ async def fetch_media(payload: FetchRequest, request: Request):
         except Exception as exc:
             raise HTTPException(
                 status_code=422,
-                detail=(
-                    "Couldn't find a profile picture for that link. Make sure "
-                    "it's a public profile URL, e.g. https://www.instagram.com/username/."
-                ),
+                detail="Couldn't find a profile picture for that link.",
             ) from exc
 
         if settings.fetch_cache_ttl_seconds > 0:
@@ -397,17 +234,13 @@ async def fetch_media(payload: FetchRequest, request: Request):
             payload.media_type,
         )
     except Exception as exc:
-        # Surface a clean, actionable error rather than a stack trace.
         raise HTTPException(
             status_code=422,
-            detail=(
-                "Couldn't resolve that link. It may be private, deleted, "
-                "expired (Stories), or require a logged-in session."
-            ),
+            detail="Couldn't resolve that link. It may be private or expired.",
         ) from exc
 
     if not raw_items:
-        raise HTTPException(status_code=404, detail="No downloadable media found at that link.")
+        raise HTTPException(status_code=404, detail="No downloadable media found.")
 
     if settings.fetch_cache_ttl_seconds > 0:
         _fetch_cache.set(cache_key, raw_items)
