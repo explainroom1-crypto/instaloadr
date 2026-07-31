@@ -1,14 +1,5 @@
 """
 Core link-resolution logic.
-
-Design notes
-------------
-Rather than hand-rolling calls against Instagram's private/internal
-endpoints (which breaks frequently and is the main way these tools get
-blocked or banned), this route delegates extraction to `yt-dlp`, a
-widely used, actively maintained open-source extractor that already
-implements Instagram support and is kept up to date by a large
-community as Instagram's frontend changes.
 """
 import asyncio
 import hashlib
@@ -69,8 +60,93 @@ class FetchResponse(BaseModel):
     items: list[MediaItem]
 
 
+def _mock_items(media_type: Optional[str]) -> list[dict]:
+    kind = media_type or "post"
+    placeholder_img = "https://placehold.co/720x900/1e2430/edeae0?text=MOCK+FRAME"
+    placeholder_video = "https://www.w3schools.com/html/mov_bbb.mp4"
+
+    if kind == "story":
+        return [
+            {
+                "media_type": "jpg",
+                "download_url": placeholder_img,
+                "thumbnail_url": placeholder_img,
+                "width": 1080,
+                "height": 1920,
+                "duration": None,
+            }
+        ]
+
+    if kind == "reel":
+        return [
+            {
+                "media_type": "mp4",
+                "download_url": placeholder_video,
+                "thumbnail_url": placeholder_img,
+                "width": 1080,
+                "height": 1920,
+                "duration": 12.4,
+            }
+        ]
+
+    if kind == "video":
+        return [
+            {
+                "media_type": "mp4",
+                "download_url": placeholder_video,
+                "thumbnail_url": placeholder_img,
+                "width": 1080,
+                "height": 1350,
+                "duration": 22.0,
+            }
+        ]
+
+    if kind == "dp":
+        return [
+            {
+                "media_type": "jpg",
+                "download_url": placeholder_img,
+                "thumbnail_url": placeholder_img,
+                "width": 320,
+                "height": 320,
+                "duration": None,
+            }
+        ]
+
+    if kind == "audio":
+        placeholder_audio = "https://www.w3schools.com/html/horse.mp3"
+        return [
+            {
+                "media_type": "mp3",
+                "download_url": placeholder_audio,
+                "thumbnail_url": placeholder_img,
+                "width": None,
+                "height": None,
+                "duration": 9.6,
+            }
+        ]
+
+    return [
+        {
+            "media_type": "jpg",
+            "download_url": placeholder_img,
+            "thumbnail_url": placeholder_img,
+            "width": 1080,
+            "height": 1350,
+            "duration": None,
+        },
+        {
+            "media_type": "mp4",
+            "download_url": placeholder_video,
+            "thumbnail_url": placeholder_img,
+            "width": 1080,
+            "height": 1350,
+            "duration": 8.2,
+        },
+    ]
+
+
 def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[str] = None) -> list[dict]:
-    """Runs yt-dlp extraction in a worker thread with fixed audio-video formats."""
     try:
         import yt_dlp
     except ImportError as exc:
@@ -87,7 +163,6 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         "socket_timeout": timeout,
         "ignore_no_formats_error": True,
         "cookiefile": getattr(settings, "cookies_file", None) or None,
-        # Fixed format string to ensure audio is always combined with video
         "format": "bestvideo+bestaudio/best",
     }
 
@@ -196,7 +271,7 @@ async def fetch_media(payload: FetchRequest, request: Request):
     settings = get_settings()
 
     if settings.mock_mode:
-        raw_items = []
+        raw_items = _mock_items(payload.media_type)
         return FetchResponse(source_url=payload.url, items=[MediaItem(**item) for item in raw_items])
 
     if payload.media_type == "dp":
