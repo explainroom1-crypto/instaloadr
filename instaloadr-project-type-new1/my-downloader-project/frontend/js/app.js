@@ -127,19 +127,16 @@ function renderFrames(strip, items) {
  * <a download href="cdn-url"> would just open the file in a new tab
  * instead of saving it. A same-origin blob URL doesn't have that problem.
  */
-async function downloadSingleItem(button) {
-  const cdnUrl = button.dataset.downloadUrl;
-  const audioUrl = button.dataset.audioUrl;
-  const isVideo = button.dataset.mediaType === "mp4";
-  const originalLabel = button.textContent;
-  button.disabled = true;
+// Determine the correct video source based on the availability of an audio stream
+let finalVideoUrl = item.download_url;
+if (item.audio_url) {
+    finalVideoUrl = `/api/stream-merged?video_url=${encodeURIComponent(item.download_url)}&audio_url=${encodeURIComponent(item.audio_url)}`;
+}
 
-  // Most items are a single file — /api/stream just proxies it as-is.
-  // But when the backend found video and audio as two SEPARATE
-  // Instagram CDN streams (no file has both), it sends back an
-  // audio_url alongside download_url. In that case we hit
-  // /api/stream-merged instead, which uses ffmpeg on the backend to
-  // combine the two into one playable file before streaming it here.
+// Assign this URL to your video element or download button
+videoElement.src = finalVideoUrl;
+
+  
   const streamUrl = audioUrl
     ? `${API_BASE_URL}/api/stream-merged?video_url=${encodeURIComponent(cdnUrl)}&audio_url=${encodeURIComponent(audioUrl)}`
     : `${API_BASE_URL}/api/stream?url=${encodeURIComponent(cdnUrl)}`;
