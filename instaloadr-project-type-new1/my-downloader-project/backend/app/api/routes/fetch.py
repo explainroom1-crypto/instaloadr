@@ -156,7 +156,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
 
     settings = get_settings()
 
-                ydl_opts = {
+    ydl_opts = {
         "quiet": True,
         "no_warnings": True,
         "skip_download": True,
@@ -164,7 +164,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         "ignore_no_formats_error": True,
         "cookiefile": getattr(settings, "cookies_file", None) or None,
         "format": "best",
-                }
+    }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
