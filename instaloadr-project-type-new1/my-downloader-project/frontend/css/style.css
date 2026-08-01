@@ -551,7 +551,7 @@ img{ max-width:100%; display:block; }
   color: var(--ink-soft);
   margin-top: 26px;
 }
-.notice strong{ color: var(--ink); }
+.notice-band .about-blurb{ min-height: 4.4em; }
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce){
