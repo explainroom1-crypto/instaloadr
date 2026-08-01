@@ -551,7 +551,11 @@ img{ max-width:100%; display:block; }
   color: var(--ink-soft);
   margin-top: 26px;
 }
-.notice-band .about-blurb{ min-height: 4.4em; }
+.notice-band .about-blurb{ min-height: 9em; }
+
+@media (min-width: 640px){
+  .notice-band .about-blurb{ min-height: 4.4em; }
+}
 
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce){
