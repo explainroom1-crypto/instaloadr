@@ -573,3 +573,6 @@ img, svg, video {
 .result-container, #result-section {
     min-height: 150px;
 }
+.notice-band {
+    min-height: 80px; 
+}
