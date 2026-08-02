@@ -13,7 +13,7 @@
  *
  * Edit PRODUCTION_API_BASE_URL below once your backend is deployed.
  */
-const PRODUCTION_API_BASE_URL = "https://instaloadr.onrender.com";// TODO: replace before going live
+const PRODUCTION_API_BASE_URL = "https://api.instaloadr.com";// TODO: replace before going live
 const LOCAL_API_BASE_URL = "http://localhost:8000";
 
 const API_BASE_URL =
