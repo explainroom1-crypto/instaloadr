@@ -9,6 +9,7 @@ what CORS origins are trusted) should be decided. Routes and other
 modules should never hardcode a domain or `"*"` — they should read it
 from here.
 """
+import os
 from enum import Enum
 from functools import lru_cache
 from typing import List, Optional
