@@ -2,7 +2,7 @@
  * app.js — Frontend-to-Backend bridge.
  */
 
-const PRODUCTION_API_BASE_URL = "https://129.121.126.99:5000";
+const PRODUCTION_API_BASE_URL = "http://129.121.126.99:5000";
 const LOCAL_API_BASE_URL = "https://localhost:8000";
 
 const API_BASE_URL =
