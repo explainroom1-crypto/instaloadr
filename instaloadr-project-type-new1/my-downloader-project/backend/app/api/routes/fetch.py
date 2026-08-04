@@ -162,7 +162,7 @@ def _extract_sync(url: str, max_items: int, timeout: int, media_type: Optional[s
         "skip_download": True,
         "socket_timeout": timeout,
         "ignore_no_formats_error": True,
-        "cookiefile": getattr(settings, "cookies_file", None) or None,
+        "cookiefile": "cookies_file",
         "format": "best",
     }
 
