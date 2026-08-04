@@ -3,7 +3,7 @@
  */
 
 const PRODUCTION_API_BASE_URL = "http://129.121.126.99:5000";
-const LOCAL_API_BASE_URL = "https://localhost:5000";
+const LOCAL_API_BASE_URL = "http://localhost:5000";
 
 const API_BASE_URL =
   window.DOWNLOADER_API_BASE_URL ||
