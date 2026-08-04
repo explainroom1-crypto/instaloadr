@@ -1,19 +1,8 @@
 /**
  * app.js — Frontend-to-Backend bridge.
- * Talks to the FastAPI backend's /api/fetch, /api/bundle, and
- * /api/stream endpoints and renders results into the "contact sheet"
- * frame strip.
  */
 
-/**
- * Resolve the backend URL:
- * 1. window.DOWNLOADER_API_BASE_URL, if a page sets it explicitly (highest priority)
- * 2. localhost/127.0.0.1 → local dev backend
- * 3. anything else (your real deployed frontend domain) → PRODUCTION_API_BASE_URL
- *
- * Edit PRODUCTION_API_BASE_URL below once your backend is deployed.
- */
-const PRODUCTION_API_BASE_URL = "https://129.121.126.99:8000";// TODO: replace before going live
+const PRODUCTION_API_BASE_URL = "http://129.121.126.99:8000";
 const LOCAL_API_BASE_URL = "http://localhost:8000";
 
 const API_BASE_URL =
@@ -38,16 +27,13 @@ function clearStatus(el) {
   el.className = "status-line";
 }
 
-// Per-page-type path patterns, checked client-side before ever hitting the
-// backend — catches obviously-wrong links (wrong page, typo'd URL) instantly
-// and for free, instead of spending a rate-limited backend request on them.
 const PATH_PATTERNS = {
   post: /^\/(p|reel)\/[\w-]+\/?/i,
   video: /^\/(p|reel|tv)\/[\w-]+\/?/i,
   reel: /^\/(reel|reels)\/[\w-]+\/?/i,
   story: /^\/stories\/[\w.\-]+\/?/i,
-  audio: /^\/(reel|reels|p)\/[\w-]+\/?/i, // audio is extracted from a reel/video link
-  dp: /^\/(?!p\/|reel\/|reels\/|stories\/)[\w.]+\/?$/i, // a bare profile path, e.g. /username
+  audio: /^\/(reel|reels|p)\/[\w-]+\/?/i,
+  dp: /^\/(?!p\/|reel\/|reels\/|stories\/)[\w.]+\/?$/i,
 };
 
 const MEDIA_TYPE_LABELS = {
@@ -73,12 +59,9 @@ function validateInstagramUrl(value, mediaType) {
   if (pattern && !pattern.test(parsed.pathname)) {
     return `That's an Instagram link, but not ${MEDIA_TYPE_LABELS[mediaType] || "the right type of"} link — check you're on the right page.`;
   }
-  return null; // valid
+  return null;
 }
 
-// Friendly, descriptive labels for the dynamically-rendered preview
-// thumbnails' alt/title text — keeps every generated <img> accessible
-// and search-friendly instead of a generic "Preview frame N".
 const FRAME_TYPE_LABELS = {
   image: "Instagram photo",
   photo: "Instagram photo",
@@ -112,31 +95,15 @@ function renderFrames(strip, items) {
   });
 }
 
-/**
- * Downloads a single media file with a real progress indicator.
- *
- * Routed through the backend's /api/stream proxy rather than fetching
- * Instagram's CDN URL directly from the browser — CDN responses don't
- * reliably send permissive CORS headers, so a direct cross-origin
- * fetch() can fail even though the same URL loads fine in an <img> or
- * a plain top-level navigation. Going through our own backend (which
- * we already control CORS for) sidesteps that.
- *
- * This also fixes a real limitation of the simpler approach: browsers
- * ignore the `download` attribute on cross-origin anchors, so a plain
- * <a download href="cdn-url"> would just open the file in a new tab
- * instead of saving it. A same-origin blob URL doesn't have that problem.
- */
-// Determine the correct video source based on the availability of an audio stream
-let finalVideoUrl = item.download_url;
-if (item.audio_url) {
-    finalVideoUrl = `/api/stream-merged?video_url=${encodeURIComponent(item.download_url)}&audio_url=${encodeURIComponent(item.audio_url)}`;
-}
+async function downloadSingleItem(button) {
+  const cdnUrl = button.dataset.downloadUrl;
+  const audioUrl = button.dataset.audioUrl;
+  const originalLabel = button.textContent;
+  const isVideo = button.dataset.mediaType === "mp4" || button.dataset.mediaType === "reel";
 
-// Assign this URL to your video element or download button
-videoElement.src = finalVideoUrl;
+  button.disabled = true;
+  button.textContent = "Connecting…";
 
-  
   const streamUrl = audioUrl
     ? `${API_BASE_URL}/api/stream-merged?video_url=${encodeURIComponent(cdnUrl)}&audio_url=${encodeURIComponent(audioUrl)}`
     : `${API_BASE_URL}/api/stream?url=${encodeURIComponent(cdnUrl)}`;
@@ -145,9 +112,6 @@ videoElement.src = finalVideoUrl;
     const res = await fetch(streamUrl);
 
     if (!res.ok) {
-      // Proxy declined (e.g. mock-mode placeholder host isn't on the
-      // CDN allowlist, or the file expired) — fall back to opening the
-      // URL directly rather than leaving the user with nothing.
       window.open(cdnUrl, "_blank", "noopener");
       button.textContent = originalLabel;
       button.disabled = false;
@@ -232,12 +196,6 @@ async function downloadZip({ url, mediaType, statusEl, zipButton }) {
   }
 }
 
-/**
- * Wires up a downloader form.
- * @param {Object} opts
- * @param {string} opts.formSelector
- * @param {string} opts.mediaType - "post" | "reel" | "story", sent as a hint to the backend.
- */
 function initDownloader({ formSelector, mediaType }) {
   const form = $(formSelector);
   if (!form) return;
@@ -248,8 +206,6 @@ function initDownloader({ formSelector, mediaType }) {
   const sheet = form.parentElement.querySelector(".contact-sheet");
   const strip = sheet ? sheet.querySelector(".frame-strip") : null;
 
-  // Delegate clicks on per-frame "Save" buttons (they're re-created on
-  // every fetch, so a single delegated listener is simpler than rebinding).
   if (strip) {
     strip.addEventListener("click", (e) => {
       const btn = e.target.closest(".dl-btn");
@@ -268,7 +224,7 @@ function initDownloader({ formSelector, mediaType }) {
     }
     const validationError = validateInstagramUrl(url, mediaType);
     if (validationError) {
-      setStatus(statusEl, validationError, "error");
+      setStatus(statusel, validationError, "error");
       return;
     }
 
@@ -324,11 +280,6 @@ function initDownloader({ formSelector, mediaType }) {
   });
 }
 
-/**
- * Wires up every "Paste" button: reads the clipboard and drops the
- * text straight into the input sitting next to it, then focuses the
- * input so the person can immediately hit Download.
- */
 function initPasteButtons() {
   document.querySelectorAll("[data-paste-btn]").forEach((btn) => {
     btn.addEventListener("click", async () => {
@@ -341,8 +292,6 @@ function initPasteButtons() {
           input.focus();
         }
       } catch {
-        // Clipboard permission denied or unsupported — just focus the
-        // field so the person can paste manually (Cmd/Ctrl+V).
         input.focus();
       }
     });
