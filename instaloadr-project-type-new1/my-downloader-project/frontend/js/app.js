@@ -2,7 +2,7 @@
  * app.js — Frontend-to-Backend bridge.
  */
 
-const PRODUCTION_API_BASE_URL = "https://instaloadr.com";
+const PRODUCTION_API_BASE_URL = "https://www.instaloadr.com";
 const LOCAL_API_BASE_URL = "http://localhost:5000";
 
 const API_BASE_URL =
