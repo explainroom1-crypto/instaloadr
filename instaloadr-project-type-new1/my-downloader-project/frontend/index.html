@@ -94,7 +94,7 @@
       "name": "How do I download Instagram photos and videos?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Copy the link from the Instagram post (tap Share \u2192 Copy Link), paste it into the box above, and tap Download. Every photo or video in that post shows up below \u2014 tap Download on the one you want and it saves to your device."
+        "text": "Copy the link from the Instagram post (tap Share \u2192 Copy Link), paste it into the box above, and tap Download. Every photo or video in that post shows up below — tap Download on the one you want and it saves to your device."
       }
     },
     {
@@ -176,6 +176,14 @@
         "@type": "Answer",
         "text": "Yes. It doesn't ask for your Instagram login, doesn't install anything on your device, and only ever reads content that's already publicly visible. There's nothing to download or run beyond the files you choose to save."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Looking for Reels or Stories?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the dedicated Reels downloader or Story downloader \u2014 same engine, tuned for that format."
+      }
     }
   ]
 }</script>
@@ -183,7 +191,7 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to Download Instagram Photos",
-  "description": "Save a public Instagram photo or multi-image carousel post at full resolution, no login required.",
+  "description": "Save a public Instagram photo or carousel post at full resolution, no login required.",
   "totalTime": "PT1M",
   "estimatedCost": { "@type": "MonetaryAmount", "currency": "USD", "value": "0" },
   "supply": [{ "@type": "HowToSupply", "name": "Link to a public Instagram photo or carousel post" }],
@@ -253,7 +261,7 @@
 <a class="active" href="index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="13" rx="2" width="15" x="2.5" y="3.5"></rect><circle cx="7" cy="8" r="1.4"></circle><path d="M3 14l4-4 3 3 4-5 4 6"></path></svg><span>Photo Downloader</span></a>
 <a href="reels.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><rect height="15" rx="4" width="15" x="2.5" y="2.5"></rect><path d="M8 7l5 3-5 3V7z" fill="currentColor" stroke="none"></path></svg><span>Reels Downloader</span></a>
 <a href="story.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><circle cx="10" cy="10" r="7"></circle></svg><span>Story Downloader</span></a>
-<a href="dp.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><circle cx="10" cy="10" r="7.5"></circle><circle cx="10" cy="8" r="2.2"></circle><path d="M4.8 15.5c1-2.4 3-3 5.2-3s4.2.6 5.2 3"></path></svg><span>Profile Picture Downloader</span></a>
+<a class="type-tab" href="dp.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><circle cx="10" cy="10" r="7.5"></circle><circle cx="10" cy="8" r="2.2"></circle><path d="M4.8 15.5c1-2.4 3-3 5.2-3s4.2.6 5.2 3"></path></svg><span>Profile Picture Downloader</span></a>
 <a href="audio.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewbox="0 0 20 20"><path d="M8 14V5l7-1.5V12"></path><circle cx="6" cy="14" r="2"></circle><circle cx="13" cy="12" r="2"></circle></svg><span>Audio Downloader</span></a>
 <a href="blog/index.html"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 20 20"><rect height="15" rx="1.5" width="12" x="4" y="2.5"></rect><path d="M7 7h6M7 10.5h6M7 14h4"></path></svg><span>Blog</span></a></div>
 </details>
@@ -455,7 +463,6 @@
 <p class="platform-note">InstaLoadr is a website, not an app — there's nothing to install on either platform, and it works the same way on a laptop or desktop browser too.</p>
 </div>
 </section>
-<div class="wrap"><div aria-hidden="true" class="ad-slot ad-slot--rectangle"><span>Ad space — 300×250</span></div></div>
 <section class="faq">
 <div class="wrap">
 <h2>Questions</h2>
@@ -530,6 +537,14 @@
 <span class="legal-links"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a> · <a href="disclaimer.html#dmca">DMCA</a> · <a href="disclaimer.html">Disclaimer</a></span>
 </div>
 </footer>
+
+<!-- runtime global: set BEFORE app.js loads -->
+<script>
+  // runtime global used by app.js when build-time env vars aren't available
+  // use the www domain to avoid the www ↔ non-www redirect that breaks preflight
+  window.DOWNLOADER_API_BASE_URL = "https://www.instaloadr.com";
+</script>
+
 <script src="js/app.js" defer></script>
 </body>
 </html>
