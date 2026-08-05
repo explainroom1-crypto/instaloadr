@@ -1,0 +1,21 @@
+# Systemd service template for instaloadr backend
+# Copy this file to /etc/systemd/system/instaloadr-backend.service and edit the ExecStart path
+
+[Unit]
+Description=InstaLoadr backend
+After=network.target
+
+[Service]
+# Recommended: run as dedicated non-root user (e.g., www-data) and chown the project to that user.
+User=root
+Group=root
+WorkingDirectory=/path/to/backend
+Environment="ENVIRONMENT=production"
+Environment="CORS_ALLOWED_ORIGINS=https://instaloadr.com,https://www.instaloadr.com"
+# Update the ExecStart path to point to your venv's uvicorn
+ExecStart=/path/to/backend/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 5000
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
